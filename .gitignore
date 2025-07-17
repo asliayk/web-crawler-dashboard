@@ -16,6 +16,7 @@ backend/.env
 .DS_Store
 .idea/
 .vscode/
+.history/
 
 # Logs
 *.log
