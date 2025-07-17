@@ -1,0 +1,23 @@
+# Dockerfile
+FROM golang:1.21-alpine AS builder
+WORKDIR /app
+
+# 1) Copy module files
+COPY go.mod go.sum ./
+
+# 2) Copy all source so that `go mod tidy` sees your imports
+COPY . .
+
+# 3) Download dependencies & generate go.sum
+RUN go mod tidy
+
+# 4) Build the binary (the "." tells Go to include every .go in this dir)
+RUN go build -o server .
+
+# ---- final image ----
+FROM alpine:3.18
+WORKDIR /app
+COPY --from=builder /app/server .
+
+EXPOSE 8080
+CMD ["./server"]

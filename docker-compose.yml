@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: crawler
+    ports:
+      - '3307:3306'
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    depends_on:
+      - mysql
+    ports:
+      - '8080:8080'
+    environment:
+      DB_USER: root
+      DB_PASS: rootpw
+      DB_NAME: crawler
+      DB_HOST: mysql
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+volumes:
+  db_data:

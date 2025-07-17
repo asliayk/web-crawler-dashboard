@@ -1,0 +1,13 @@
+# backend/Dockerfile
+FROM golang:1.21-alpine
+WORKDIR /app
+
+# go.mod’dan bağımlılıkları indir ve go.sum oluştur
+COPY go.mod .
+COPY main.go .
+RUN go mod tidy  
+
+# Uygulamayı derle
+RUN go build -o server main.go
+
+CMD ["./server"]
